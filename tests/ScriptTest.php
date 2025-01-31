@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -26,19 +26,22 @@
 
 namespace NTLAB\JS\Test;
 
+use PHPUnit\Framework\TestCase;
 use NTLAB\JS\DependencyResolver;
 use NTLAB\JS\Manager;
 use NTLAB\JS\Backend;
 use NTLAB\JS\Script;
+use NTLAB\JS\Util\Escaper;
 use NTLAB\JS\Test\Script\TestScript;
 
-class ScriptTest extends BaseTest
+class ScriptTest extends TestCase
 {
     protected function setUp(): void
     {
         Manager::getInstance()
             ->setBackend(new Backend())
             ->addResolver(new DependencyResolver('NTLAB\JS\Test\Script'));
+        Escaper::setEol("\r\n");
     }
 
     public function testCreate()
@@ -86,23 +89,15 @@ EOF
         , $script->getRepository()->getContent(), 'Script auto include on should add script content');
     }
 
-    public function testScript()
+    public function testInitializer()
     {
-        $script = Script::create('JQuery');
-        $script->getRepository()
-            ->setWrapper(<<<EOF
-(function($) {%s})(jQuery);
-EOF
-            )
-            ->setWrapSize(1)
-        ;
+        $script = Script::create('NoRepoScript');
         $script->add('$.test();');
-        $this->assertTrue(Manager::getInstance()->has('jquery'), 'Repository properly initialized when script added');
         $this->assertEquals(<<<EOF
-(function($) {
+(function() {
     $.test();
-})(jQuery);
+})();
 EOF
-        , $script->getRepository()->getContent(), 'Script properly added');
+        , $script->getRepository()->getContent(), 'Script properly decorated with default repository initializer');
     }
 }

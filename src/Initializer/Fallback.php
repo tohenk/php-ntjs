@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,26 +24,52 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script;
+namespace NTLAB\JS\Initializer;
 
-use NTLAB\JS\Script as Base;
-use NTLAB\JS\Util\Asset;
+use NTLAB\JS\Manager;
 
 /**
- * Include PdfJs assets.
+ * Fallback repository initializer.
  *
  * @author Toha <tohenk@yahoo.com>
  */
-class Pdfjs extends Base
+class Fallback
 {
-    protected function configure()
+    /**
+     * Initialize script repository.
+     *
+     * @param \NTLAB\JS\Repository $repo
+     */
+    public static function initialize($repo)
     {
-        $this->getAsset()->setPath(Asset::ASSET_JAVASCRIPT, 'build');
-        $this->addAsset(Asset::ASSET_JAVASCRIPT, 'pdf.mjs');
-    }
-
-    protected function getRepositoryName()
-    {
-        return $this->getConfig('pdfjs-legacy') ? 'pdfjs-legacy' : 'pdfjs';
+        if (Manager::getInstance()->getBackend()->getConfig('xhr')) {
+            // setup repository for XHR
+            $repo
+                ->setWrapper(<<<EOF
+(function() {
+    (function loader(f) {
+        if (document.ntloader && !document.ntloader.isScriptLoaded()) {
+            setTimeout(function() {
+                loader(f);
+            }, 100);
+        } else {
+            f();
+        }
+    })(function() {%s});
+})();
+EOF
+                )
+                ->setWrapSize(2)
+            ;
+        } else {
+            // setup repository for normal request
+            $repo
+                ->setWrapper(<<<EOF
+(function() {%s})();
+EOF
+                )
+                ->setWrapSize(1)
+            ;
+        }
     }
 }

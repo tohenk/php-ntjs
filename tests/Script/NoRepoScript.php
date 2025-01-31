@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,17 +24,16 @@
  * SOFTWARE.
  */
 
-namespace NTLAB\JS\Script\Bootstrap;
+namespace NTLAB\JS\Test\Script;
 
-/**
- * Include Bootstrap StarRating FontAwesome Solid theme assets.
- *
- * @author Toha <tohenk@yahoo.com>
- */
-class StarRatingThemeFas extends StarRatingTheme
+use NTLAB\JS\Script as Base;
+
+class NoRepoScript extends Base
 {
-    protected function setup()
+    protected function doCall($message)
     {
-        $this->theme = 'krajee-fas';
+        $this->add(<<<EOF
+// $message
+EOF);
     }
 }

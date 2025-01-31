@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2015-2024 Toha <tohenk@yahoo.com>
+ * Copyright (c) 2015-2025 Toha <tohenk@yahoo.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -59,7 +59,7 @@ class Escaper
     }
 
     /**
-     * Escape mixed php value into javascript value.
+     * Escape mixed PHP value into javascript value.
      *
      * @param mixed $value  Value to be escaped as javascript
      * @param string $key  Array key
@@ -78,6 +78,15 @@ class Escaper
                 $values = [];
                 foreach ($value as $k => $v) {
                     $result = '';
+                    // treat string started with 'function(' as raw
+                    if (is_string($v) && 'function(' === substr($v, 0, 9)) {
+                        // add indentation
+                        $v = self::implodeAndPad(explode(self::getEol(), $v), 1, null);
+                        $v = JSValue::createRaw(trim($v));
+                    }
+                    if ($fn = $v instanceof JSValue && $v->isRaw() && 'function(' === substr($v, 0, 9)) {
+                        $v = JSValue::createRaw(substr($v, 8));
+                    }
                     if (!is_int($k) || !$numKeys) {
                         $numKeys = false;
                         $akey = $k;
@@ -85,13 +94,7 @@ class Escaper
                         if (preg_match('/[\.\+\-\[\]\/\s]/', $akey)) {
                             $akey = '\''.$akey.'\'';
                         }
-                        $result = $akey.': ';
-                    }
-                    // treat string started with 'function(' as raw
-                    if (is_string($v) && 'function(' === substr($v, 0, 9)) {
-                        // add indentation
-                        $v = self::implodeAndPad(explode(self::getEol(), $v), 1, null);
-                        $v = JSValue::createRaw(trim($v));
+                        $result = $akey.(!$fn ? ': ' : '');
                     }
                     $result .= self::escape($v, $k, $indent + 1, $v instanceof JSValue && null !== $v->isInline() ? $v->isInline() : $inline);
                     $values[] = $result;
