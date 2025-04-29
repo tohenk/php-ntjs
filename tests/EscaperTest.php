@@ -62,9 +62,9 @@ class EscaperTest extends TestCase
     testFn(a, b) {}
 }
 EOF
-        , Escaper::escape([
-            'test' => JSValue::createRaw('function() {}'),
-            'testFn' => 'function(a, b) {}'
-        ]), 'Proper escape nested');
+            , Escaper::escape([
+                'test' => JSValue::createRaw('function() {}'),
+                'testFn' => 'function(a, b) {}'
+            ]), 'Proper escape nested');
     }
 }

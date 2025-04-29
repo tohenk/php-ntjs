@@ -63,7 +63,7 @@ class Escaper
      *
      * @param mixed $value  Value to be escaped as javascript
      * @param string $key  Array key
-     * @param int $indent  Identation size   
+     * @param int $indent  Identation size
      * @param boolean $inline  Inline format
      * @return string
      */
@@ -106,12 +106,13 @@ class Escaper
         } else {
             if ($value instanceof JSValue) {
                 $value->setIndent($indent);
-            } else if (null !== $key && !is_object($value)) {
+            } elseif (null !== $key && !is_object($value)) {
                 $value = self::escapeValue($value, self::escapeExcept($key, $value));
             } else {
                 $value = self::escapeValue($value, true);
             }
         }
+
         return $value;
     }
 
@@ -126,13 +127,14 @@ class Escaper
     {
         if (null === $value) {
             $value = 'null';
-        } else if (is_bool($value)) {
+        } elseif (is_bool($value)) {
             $value = $value ? 'true' : 'false';
-        } else if (is_int($value) || is_float($value)) {
+        } elseif (is_int($value) || is_float($value)) {
             $value = (string) $value;
-        } else if ($escape) {
+        } elseif ($escape) {
             $value = '\''.strtr($value, ['\'' => '\\\'', "\r" => '\\r', "\n" => '\\n', "\t" => '\\t', "\b" => '\\b', "\f" => '\\f']).'\'';
         }
+
         return $value;
     }
 
@@ -148,6 +150,7 @@ class Escaper
         if (is_int($value) || is_bool($value) || is_array($value) || is_object($value)) {
             return false;
         }
+
         return true;
     }
 
@@ -162,6 +165,7 @@ class Escaper
     public static function implodeAndPad($array, $size, $delim = ',')
     {
         $pad = self::padLeft($size);
+
         return static::$eol.$pad.implode($delim.static::$eol.$pad, $array).static::$eol.self::padLeft($size - 1);
     }
 

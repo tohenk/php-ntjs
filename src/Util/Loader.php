@@ -57,6 +57,7 @@ class Loader
         if (!in_array($js, $this->javascripts)) {
             $this->javascripts[] = $js;
         }
+
         return $this;
     }
 
@@ -71,6 +72,7 @@ class Loader
         if (!in_array($css, $this->stylesheets)) {
             $this->stylesheets[] = $css;
         }
+
         return $this;
     }
 
@@ -86,6 +88,7 @@ class Loader
         foreach ($this->javascripts as $file) {
             $js[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_JS);
         }
+
         return $js;
     }
 
@@ -101,6 +104,7 @@ class Loader
         foreach ($this->stylesheets as $file) {
             $css[] = $manager->getBackend()->asset($file, BackendInterface::ASSET_CSS);
         }
+
         return $css;
     }
 
@@ -117,7 +121,8 @@ class Loader
         $css = $this->getStylesheets();
         if (count($js) || count($css)) {
             $assets = JSValue::create(['js' => $js, 'css' => $css]);
-            $script = $manager->compress(<<<EOF
+            $script = $manager->compress(
+                <<<EOF
 if (!document.ntloader) {
     document.ntloader = {
         parent: document.head ? document.head : document.body,
@@ -255,6 +260,7 @@ if (!document.ntloader) {
 document.ntloader.load($assets);
 EOF
             );
+
             return $manager->scriptTag($script);
         }
     }

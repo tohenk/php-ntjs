@@ -100,6 +100,7 @@ class Repository
         if ($text !== $this->wrapper) {
             $this->wrapper = $text;
         }
+
         return $this;
     }
 
@@ -112,6 +113,7 @@ class Repository
     public function setWrapSize($size)
     {
         $this->wrapSize = (int) $size;
+
         return $this;
     }
 
@@ -123,6 +125,7 @@ class Repository
     public function enableWrapper()
     {
         $this->useWrapper = true;
+
         return $this;
     }
 
@@ -134,6 +137,7 @@ class Repository
     public function disableWrapper()
     {
         $this->useWrapper = true;
+
         return $this;
     }
 
@@ -156,6 +160,7 @@ class Repository
     {
         $this->scripts = [];
         $this->included = false;
+
         return $this;
     }
 
@@ -174,6 +179,7 @@ class Repository
                 }
             }
         }
+
         return rtrim($script).';';
     }
 
@@ -203,6 +209,7 @@ class Repository
             }
             $this->scripts[$position][] = $text;
         }
+
         return $this;
     }
 
@@ -216,6 +223,7 @@ class Repository
     {
         if (!$this->included) {
             $this->included = true;
+
             return Manager::getInstance()->compress($this->__toString());
         }
     }
@@ -233,6 +241,7 @@ class Repository
                 $script = sprintf($this->wrapper, Escaper::implodeAndPad(explode(Escaper::getEol(), rtrim($script)), $this->wrapSize, null));
             }
         }
+
         return $script;
     }
 }

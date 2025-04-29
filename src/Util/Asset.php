@@ -112,6 +112,7 @@ class Asset
     public function setAlias($alias)
     {
         $this->alias = $alias;
+
         return $this;
     }
 
@@ -132,6 +133,7 @@ class Asset
                 $this->dirs[$type] = $dir;
             }
         }
+
         return $this;
     }
 
@@ -146,6 +148,7 @@ class Asset
     public function generate($name, $version = null, $minified = null)
     {
         $assetName = $name.($version ? '-'.$version : '').($minified ? '.min' : '');
+
         return $assetName;
     }
 
@@ -191,6 +194,7 @@ class Asset
         if (($dirName = $this->getDirName($asset)) && strlen($dirName)) {
             $dir .= '/'.$dirName;
         }
+
         return $dir;
     }
 
@@ -204,6 +208,7 @@ class Asset
     {
         $matches = null;
         preg_match('#^(?P<PROTO>https?)\://(?P<DOMAIN>[a-zA-Z0-9\-\.]+)/?(?P<PATH>.*)#', $url, $matches);
+
         return $matches;
     }
 
@@ -233,6 +238,7 @@ class Asset
                 }
             }
         }
+
         return $name;
     }
 
@@ -245,6 +251,7 @@ class Asset
     protected function isLocal($name)
     {
         $matches = $this->parseUrl($name);
+
         return $matches && $matches['PROTO'] ? false : true;
     }
 
@@ -266,6 +273,7 @@ class Asset
             }
             $name = $this->backend->generateAsset($this, $name, $asset);
         }
+
         return $this->fixExtension($asset, $name);
     }
 }

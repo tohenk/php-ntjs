@@ -144,6 +144,7 @@ abstract class Script
             $options = isset(static::$defaultOptions[$name]) ? static::$defaultOptions[$name] : [];
             static::$maps[$name]['obj'] = new $class($options);
         }
+
         return static::$maps[$name]['obj'];
     }
 
@@ -264,6 +265,7 @@ abstract class Script
         if (!$exist) {
             $this->initRepository($repo);
         }
+
         return $repo;
     }
 
@@ -349,6 +351,7 @@ abstract class Script
         foreach (func_get_args() as $deps) {
             $this->dependencies = array_merge($this->dependencies, is_array($deps) ? $deps : [$deps]);
         }
+
         return $this;
     }
 
@@ -361,6 +364,7 @@ abstract class Script
     protected function setPosition($position = Repository::POSITION_LAST)
     {
         $this->position = $position;
+
         return $this;
     }
 
@@ -382,6 +386,7 @@ abstract class Script
     protected function markAsIncluded()
     {
         static::$included[get_class($this)] = $this;
+
         return $this;
     }
 
@@ -398,6 +403,7 @@ abstract class Script
             $this->create($class)
                 ->includeScript();
         }
+
         return $this;
     }
 
@@ -409,6 +415,7 @@ abstract class Script
     public function includeDefaults()
     {
         $this->includeDepedencies(static::$defaults);
+
         return $this;
     }
 
@@ -432,6 +439,7 @@ abstract class Script
             }
             $this->buildScript();
         }
+
         return $this;
     }
 
@@ -447,6 +455,7 @@ abstract class Script
             $this->useScript($this->addDebugInfo($script, static::DBG_CLASS));
         }
         $this->getInitScript();
+
         return $this;
     }
 
@@ -460,6 +469,7 @@ abstract class Script
     protected function useScript($script, $position = null)
     {
         $this->getRepository()->add($script, null === $position ? $this->position : $position);
+
         return $this;
     }
 
@@ -512,6 +522,7 @@ abstract class Script
     public function setPriority($priority)
     {
         $this->priority = $priority;
+
         return $this;
     }
 
@@ -547,6 +558,7 @@ abstract class Script
     public function setOption($name, $value)
     {
         $this->options[$name] = $value;
+
         return $this;
     }
 
@@ -571,6 +583,7 @@ abstract class Script
     public function setAsset($asset)
     {
         $this->asset = $asset;
+
         return $this;
     }
 
@@ -595,6 +608,7 @@ abstract class Script
     public function generateAsset($name, $type, $asset = null)
     {
         $asset = $asset ?: $this->getAsset();
+
         return $asset->get($type, $name);
     }
 
@@ -609,6 +623,7 @@ abstract class Script
     public function addJavascript($js, $priority = null, $attributes = null)
     {
         $this->getBackend()->addAsset($js, BackendInterface::ASSET_JS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
+
         return $this;
     }
 
@@ -621,6 +636,7 @@ abstract class Script
     public function removeJavascript($js)
     {
         $this->getBackend()->removeAsset($js, BackendInterface::ASSET_JS);
+
         return $this;
     }
 
@@ -635,6 +651,7 @@ abstract class Script
     public function addStylesheet($css, $priority = null, $attributes = null)
     {
         $this->getBackend()->addAsset($css, BackendInterface::ASSET_CSS, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
+
         return $this;
     }
 
@@ -647,6 +664,7 @@ abstract class Script
     public function removeStylesheet($css)
     {
         $this->getBackend()->removeAsset($css, BackendInterface::ASSET_CSS);
+
         return $this;
     }
 
@@ -661,6 +679,7 @@ abstract class Script
     public function addOther($src, $priority = null, $attributes = null)
     {
         $this->getBackend()->addAsset($src, BackendInterface::ASSET_OTHER, $priority ?: BackendInterface::ASSET_PRIORITY_DEFAULT, $attributes);
+
         return $this;
     }
 
@@ -673,6 +692,7 @@ abstract class Script
     public function removeOther($src)
     {
         $this->getBackend()->removeAsset($src, BackendInterface::ASSET_OTHER);
+
         return $this;
     }
 
@@ -690,6 +710,7 @@ abstract class Script
     public function useJavascript($name, $asset = null, $priority = null, $attributes = null)
     {
         $this->addJavascript($this->generateAsset($name, Asset::ASSET_JAVASCRIPT, $asset), $priority, $attributes);
+
         return $this;
     }
 
@@ -706,6 +727,7 @@ abstract class Script
                 $locale = substr($locale, 0, 2);
             }
         }
+
         return $locale;
     }
 
@@ -736,6 +758,7 @@ abstract class Script
         if ($default && !in_array($default, $locales)) {
             $locales[] = $default;
         }
+
         return $locales;
     }
 
@@ -755,7 +778,7 @@ abstract class Script
         if (false === strpos((string) $name, '%s')) {
             $name .= '%s';
         }
-        $asset   = $asset ?: $this->getAsset();
+        $asset = $asset ?: $this->getAsset();
         $baseDir = $this->getConfig('base-dir').DIRECTORY_SEPARATOR.$asset->getDir();
         $culture = $culture ?: $this->getLocale();
         // check file
@@ -773,6 +796,7 @@ abstract class Script
                 }
             }
         }
+
         return $this;
     }
 
@@ -788,6 +812,7 @@ abstract class Script
     public function useStylesheet($name, $asset = null, $priority = null, $attributes = null)
     {
         $this->addStylesheet($this->generateAsset($name, Asset::ASSET_STYLESHEET, $asset), $priority, $attributes);
+
         return $this;
     }
 
@@ -803,6 +828,7 @@ abstract class Script
     public function useOther($name, $asset = null, $priority = null, $attributes = null)
     {
         $this->addOther($this->generateAsset($name, Asset::ASSET_OTHER, $asset), $priority, $attributes);
+
         return $this;
     }
 
@@ -822,6 +848,7 @@ abstract class Script
         if (!isset($this->assets[$key])) {
             $this->assets[$key] = [$type, $name, $asset, $priority, $attributes];
         }
+
         return $this;
     }
 
@@ -842,6 +869,7 @@ abstract class Script
         if (!isset($this->assets[$key])) {
             $this->assets[$key] = [$type, $name, $asset, $priority, $culture, $attributes];
         }
+
         return $this;
     }
 
@@ -859,6 +887,7 @@ abstract class Script
         if (isset($this->assets[$key])) {
             unset($this->assets[$key]);
         }
+
         return $this;
     }
 
@@ -876,6 +905,7 @@ abstract class Script
         } else {
             $this->includeDepedencies($dependencies);
         }
+
         return $this;
     }
 
@@ -926,6 +956,7 @@ abstract class Script
     public function setProp($name, $value)
     {
         $this->props[$name] = $value;
+
         return $this;
     }
 
@@ -940,11 +971,13 @@ abstract class Script
     {
         if ($consumer = $this->getManager()->getConsumer()) {
             static::$vars[$name] = $value;
+
             return $consumer->use($name, $value);
         } else {
             if (!$value instanceof JSValue) {
                 $value = JSValue::create($value);
             }
+
             return $value;
         }
     }
@@ -962,6 +995,7 @@ abstract class Script
             $this->includeScript();
         }
         $this->useScript($this->addDebugInfo($script), $position);
+
         return $this;
     }
 
@@ -1002,6 +1036,7 @@ EOF;
                 }
             }
         }
+
         return $script;
     }
 
@@ -1015,6 +1050,7 @@ EOF;
         $args = func_get_args();
         if (method_exists($this, 'doCall')) {
             $this->includeScript();
+
             return call_user_func_array([$this, 'doCall'], $args);
         }
     }
@@ -1036,6 +1072,7 @@ EOF;
             }
             $result[] = $line;
         }
+
         return implode(Escaper::getEol(), $result);
     }
 }

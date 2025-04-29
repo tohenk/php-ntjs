@@ -110,6 +110,7 @@ class JSValue
     public function setData($value)
     {
         $this->data = $value;
+
         return $this;
     }
 
@@ -132,6 +133,7 @@ class JSValue
     public function setInline($value)
     {
         $this->inline = $value;
+
         return $this;
     }
 
@@ -154,6 +156,7 @@ class JSValue
     public function setRaw($value)
     {
         $this->raw = $value;
+
         return $this;
     }
 
@@ -176,6 +179,7 @@ class JSValue
     public function setIndent($value)
     {
         $this->indent = $value;
+
         return $this;
     }
 
@@ -203,6 +207,7 @@ class JSValue
             }
             $value = Escaper::escape($value, null, $this->indent, $this->inline);
         }
+
         return (string) $value;
     }
 

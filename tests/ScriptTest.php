@@ -59,7 +59,7 @@ class ScriptTest extends TestCase
 do_something();
 // a message
 EOF
-        , $script->getRepository()->getContent(), 'Script call() should include script doCall()');
+            , $script->getRepository()->getContent(), 'Script call() should include script doCall()');
     }
 
     public function testAutoIncludeOff()
@@ -72,7 +72,7 @@ EOF
         $this->assertEquals(<<<EOF
 call_include_script();
 EOF
-        , $script->getRepository()->getContent(), 'Script auto include off should not add script content');
+            , $script->getRepository()->getContent(), 'Script auto include off should not add script content');
     }
 
     public function testAutoIncludeOn()
@@ -86,7 +86,7 @@ EOF
 // include script test content
 call_include_script();
 EOF
-        , $script->getRepository()->getContent(), 'Script auto include on should add script content');
+            , $script->getRepository()->getContent(), 'Script auto include on should add script content');
     }
 
     public function testInitializer()
@@ -98,6 +98,6 @@ EOF
     $.test();
 })();
 EOF
-        , $script->getRepository()->getContent(), 'Script properly decorated with default repository initializer');
+            , $script->getRepository()->getContent(), 'Script properly decorated with default repository initializer');
     }
 }

@@ -85,6 +85,7 @@ class Manager
         if (null === static::$instance) {
             static::$instance = new self();
         }
+
         return static::$instance;
     }
 
@@ -114,6 +115,7 @@ class Manager
     public function setBackend(BackendInterface $backend)
     {
         $this->backend = $backend;
+
         return $this;
     }
 
@@ -140,6 +142,7 @@ class Manager
             throw new \InvalidArgumentException('Compressor must be a CompressorInterface.');
         }
         $this->compressor = $compressor;
+
         return $this;
     }
 
@@ -166,6 +169,7 @@ class Manager
             throw new \InvalidArgumentException('Consumer must be a ConsumerInterface.');
         }
         $this->consumer = $consumer;
+
         return $this;
     }
 
@@ -188,6 +192,7 @@ class Manager
     public function addResolver(DependencyResolverInterface $resolver)
     {
         $this->resolvers[] = $resolver;
+
         return $this;
     }
 
@@ -212,6 +217,7 @@ class Manager
         if (!isset($this->cdns[$repository])) {
             $this->cdns[$repository] = new CDN($repository);
         }
+
         return $this->cdns[$repository];
     }
 
@@ -283,6 +289,7 @@ class Manager
                 }
             }
         }
+
         return $this;
     }
 
@@ -300,6 +307,7 @@ class Manager
         if (!isset($this->repositories[$name])) {
             $this->repositories[$name] = new Repository($name);
         }
+
         return $this->repositories[$name];
     }
 
@@ -339,6 +347,7 @@ class Manager
         if (null !== $content && strlen($content) && $includeTag) {
             $content = $this->scriptTag($content);
         }
+
         return $content;
     }
 
@@ -374,6 +383,7 @@ EOF;
                 }
             }
         }
+
         return false;
     }
 
@@ -405,6 +415,7 @@ EOF;
         if ($content && null !== ($compressor = $this->getCompressor())) {
             $content = $compressor->compress((string) $content);
         }
+
         return $content;
     }
 }
